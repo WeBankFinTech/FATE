@@ -34,6 +34,7 @@ Initial Configuration
 1. provide server ip/port information of deployed FATE-Flow
 
    .. code-block:: bash
+
       # provide real ip address and port info to initialize pipeline
       pipeline init --ip 127.0.0.1 --port 9380
       # optionally, set log directory of Pipeline
