@@ -89,7 +89,7 @@ class JobInvoker(object):
                 job_id = result["jobId"]
                 data = result["data"]
             except ValueError:
-                raise ValueError("job submit failed, err msg: {}".format(result))
+                raise ValueError(f"job submit failed, err msg: {result}")
 
         return job_id, data
 
@@ -110,7 +110,7 @@ class JobInvoker(object):
                 job_id = result["jobId"]
                 data = result["data"]
             except:
-                raise ValueError("job submit failed, err msg: {}".format(result))
+                raise ValueError(f"job submit failed, err msg: {result}")
 
         return job_id, data
 
@@ -191,7 +191,7 @@ class JobInvoker(object):
             data = result["data"][0]
             return ret_code, ret_msg, data
         except ValueError:
-            raise ValueError("query job result is {}, can not parse useful info".format(result))
+            raise ValueError(f"query job result is {result}, can not parse useful info")
 
     def get_output_data_table(self, job_id, cpn_name, role, party_id):
         """
@@ -257,7 +257,7 @@ class JobInvoker(object):
                 LOGGER.info(f"No output data table found in {result}")
 
         except ValueError:
-            raise ValueError("Job submit failed, err msg: {}".format(result))
+            raise ValueError(f"Job submit failed, err msg: {result}")
         return data
 
     def query_task(self, job_id, role, party_id, status=None):
@@ -266,7 +266,7 @@ class JobInvoker(object):
                                         party_id=party_id, status=status)
         try:
             if 'retcode' not in result:
-                raise ValueError("Cannot query task status of job {}".format(job_id))
+                raise ValueError(f"Cannot query task status of job {job_id}")
 
             ret_code = result["retcode"]
             ret_msg = result["retmsg"]
@@ -277,7 +277,7 @@ class JobInvoker(object):
                 data = result["data"]
             return ret_code, ret_msg, data
         except ValueError:
-            raise ValueError("Query task result is {}, cannot parse useful info".format(result))
+            raise ValueError(f"Query task result is {result}, cannot parse useful info")
 
     def get_output_data(self, job_id, cpn_name, role, party_id, limits=None):
         """
@@ -352,7 +352,6 @@ class JobInvoker(object):
         data_dict = {"data": data, "meta": meta}
         return data_dict
 
-
     @staticmethod
     def extract_output_data(output_data, limits):
         data = []
@@ -424,7 +423,7 @@ class JobInvoker(object):
         if result is None or 'retcode' not in result:
             raise ValueError("Call flow deploy is failed, check if fate_flow server is start!")
         elif result["retcode"] != 0:
-            raise ValueError("Cannot deploy components, error msg is {}".format(result["retmsg"]))
+            raise ValueError(f"Cannot deploy components, error msg is {result["retmsg"]}")
         else:
             return result["data"]
 
@@ -433,6 +432,6 @@ class JobInvoker(object):
         if result is None or 'retcode' not in result:
             raise ValueError("Call flow get predict dsl is failed, check if fate_flow server is start!")
         elif result["retcode"] != 0:
-            raise ValueError("Cannot get predict dsl, error msg is {}".format(result["retmsg"]))
+            raise ValueError(f"Cannot get predict dsl, error msg is {result["retmsg"]}")
         else:
             return result["data"]
