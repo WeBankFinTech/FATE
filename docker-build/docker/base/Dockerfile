@@ -17,7 +17,8 @@ RUN set -eux && \
     yum clean all
 
 RUN pip install --upgrade pip && \
-    sed -i '/tensorflow==1.15.4/d' /data/projects/python/requirements.txt && \
+    sed -i '/tensorflow>=2.4.1/d' /data/projects/python/requirements.txt && \
     sed -i '/torch==1.4.0/d' /data/projects/python/requirements.txt && \
     sed -i '/torchvision==0.5.0/d' /data/projects/python/requirements.txt && \
+    sed -i '/pytorch-lightning>=1.2.1/d' /data/projects/python/requirements.txt && \
     pip install -r requirements.txt

@@ -168,7 +168,11 @@ buildModule() {
 
         cd ${SOURCE_DIR}
 
+        [ -f ${SOURCE_DIR}/docker-build/docker/modules/python-nn/requirements.txt ] && rm ${SOURCE_DIR}/docker-build/docker/modules/python-nn/requirements.txt
+        ln ${SOURCE_DIR}/python/requirements.txt ${SOURCE_DIR}/docker-build/docker/modules/python-nn/requirements.txt
         for module in "python" "fateboard" "eggroll" "python-nn"; do
+        echo "START BUILDING BASE IMAGE"
+        cd ${WORKING_DIR}
                 echo "### START BUILDING ${module} ###"
                 docker build --build-arg version=${version} --build-arg fateboard_version=${fateboard_version} --build-arg PREFIX=${PREFIX} --build-arg BASE_TAG=${BASE_TAG} --no-cache -t ${PREFIX}/${module}:${TAG} -f ${SOURCE_DIR}/docker-build/docker/modules/${module}/Dockerfile ${SOURCE_DIR}/docker-build/docker/modules/${module}
                 echo "### FINISH BUILDING ${module} ###"

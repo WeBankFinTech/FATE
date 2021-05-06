@@ -82,7 +82,7 @@ zookeeper:
 }
 ```
 
-所有参数均要根据实际情况填入，特别注意work_mode，分布式集群为1，单机为0
+所有参数均要根据实际情况填入，特别注意work_mode，分布式集群为1，单机为0。serving服务将从FATE Flow下载模型。默认情况下，serving服务下载模型的地址如下："http：// {FATE_FLOW_IP}：{FATE_FLOW_HTTP_PORT} {FATE_FLOW_MODEL_TRANSFER_ENDPOINT}"。用户也可以把job_parameters['use_transfer_url_on_serving']设置成"true"，serving服务将通过serving-server.properties中的`model.transfer.url`中定义的地址来下载模型。
 执行命令：
 
 ```bash
