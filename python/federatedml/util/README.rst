@@ -73,7 +73,10 @@ Sample Weight
 Sample Weight assigns weight to input sample.
 Weight may be specified by input param ``class_weight`` or ``sample_weight_name``.
 Output data instances will each have a weight value,
-which will be used for training.
+which will be used for training. While weighted instances
+may be used for prediction(SampleWeight component will assign weights to instances if
+prediction pipeline includes this component),
+Evaluation currently does not take weights into account when calculating metrics.
 
 If result weighted instances include negative weight, a warning message will be given.
 

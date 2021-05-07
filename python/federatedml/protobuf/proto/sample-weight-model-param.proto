@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package com.webank.ai.fate.core.mlmodel.buffer;
+option java_outer_classname = "SampleWeightModelParamProto";
+
+message SampleWeightModelParam {
+    repeated string header = 1;
+    string weight_mode = 2;
+    map<string, double> class_weight = 3;
+}

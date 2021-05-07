@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package com.webank.ai.fate.core.mlmodel.buffer;
+option java_outer_classname = "SampleWeightModelMetaProto";
+
+message SampleWeightModelMeta{
+    string sample_weight_name = 1;
+    bool normalize = 2;
+    bool need_run = 3;
+}

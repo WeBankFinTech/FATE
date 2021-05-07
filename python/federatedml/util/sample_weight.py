@@ -21,7 +21,10 @@ import numpy as np
 
 from fate_flow.entity.metric import Metric, MetricMeta
 from federatedml.model_base import ModelBase
+from federatedml.statistic import data_overview
 from federatedml.param.sample_weight_param import SampleWeightParam
+from federatedml.protobuf.generated.sample_weight_model_meta_pb2 import SampleWeightModelMeta
+from federatedml.protobuf.generated.sample_weight_model_param_pb2 import SampleWeightModelParam
 from federatedml.statistic.data_overview import get_label_count, check_negative_sample_weight
 from federatedml.util import consts, LOGGER
 
@@ -33,7 +36,10 @@ class SampleWeight(ModelBase):
         self.metric_name = "sample_weight"
         self.metric_namespace = "train"
         self.metric_type = "SAMPLE_WEIGHT"
+        self.model_meta_name = "SampleWeightModelMeta"
+        self.model_param_name = "SampleWeightModelParam"
         self.weight_mode = None
+        self.header = None
 
     def _init_model(self, params):
         self.model_param = params
@@ -121,16 +127,61 @@ class SampleWeight(ModelBase):
                                      metric_name=self.metric_name,
                                      metric_meta=metric_meta)
 
+    def export_model(self):
+        meta_obj = SampleWeightModelMeta(sample_weight_name=self.sample_weight_name,
+                                    normalize=self.normalize,
+                                    need_run=self.need_run)
+        param_obj = SampleWeightModelParam(header=self.header,
+                                      weight_mode = self.weight_mode,
+                                      class_weight=self.class_weight)
+        result = {
+            self.model_meta_name: meta_obj,
+            self.model_param_name: param_obj
+        }
+        return result
+
+    def load_model(self, model_dict):
+        param_obj = list(model_dict.get('model').values())[0].get(self.model_param_name)
+        meta_obj = list(model_dict.get('model').values())[0].get(self.model_meta_name)
+
+        self.header = list(param_obj.header)
+        self.need_run = meta_obj.need_run
+        self.weight_mode = param_obj.weight_mode
+        if self.weight_mode == "class weight":
+            self.class_weight = {k: v for k, v in param_obj.class_weight.items()}
+        elif self.weight_mode == "sample weight name":
+            self.sample_weight_name = meta_obj.sample_weight_name
+            self.normalize = meta_obj.normalize
+        else:
+            raise ValueError(f"Unknown weight mode {self.weight_mode} loaded. "
+                             f"Only support 'class weight' and 'sample weight name'")
+
     def transform(self, data_instances):
         LOGGER.info(f"Enter Sample Weight Transform")
-        if self.class_weight is not None:
-            LOGGER.warning(f"Transform does not support class weight mode. Original input data returned")
-            return data_instances
-        return self.fit(data_instances)
+        new_schema = copy.deepcopy(data_instances.schema)
+        new_schema["sample_weight"] = "weight"
+        weight_loc = None
+        if self.weight_mode == "sample weight name":
+            weight_loc = SampleWeight.get_weight_loc(data_instances, self.sample_weight_name)
+            if weight_loc is not None:
+                new_schema["header"].pop(weight_loc)
+            else:
+                LOGGER.warning(f"Cannot find weight column of given sample_weight_name '{self.sample_weight_name}'."
+                               f"Original input data returned")
+                return data_instances
+        result_instances = self.transform_weighted_instance(data_instances, weight_loc)
+        result_instances.schema = new_schema
+
+        self.callback_info()
+        if result_instances.mapPartitions(check_negative_sample_weight).reduce(lambda x, y: x or y):
+            LOGGER.warning(f"Negative weight found in weighted instances.")
+        return result_instances
 
     def fit(self, data_instances):
         if self.sample_weight_name is None and self.class_weight is None:
             return data_instances
+
+        self.header = data_overview.get_header(data_instances)
 
         if self.class_weight:
             self.weight_mode = "class weight"
