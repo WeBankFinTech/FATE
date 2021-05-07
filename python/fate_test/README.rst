@@ -204,7 +204,7 @@ command options
 
    .. code-block:: bash
 
-      fate_test suite -i <path1 contains *testsuite.json> -j {}
+      fate_test suite -i <path1 contains *testsuite.json> -uj {}
 
    will run testsuites in *path1* with respective job parameters set to provided values
 
@@ -212,7 +212,7 @@ command options
 
    .. code-block:: bash
 
-      fate_test suite -i <path1 contains *testsuite.json> -c {}
+      fate_test suite -i <path1 contains *testsuite.json> -uc {}
 
    will run testsuites in *path1* with respective component parameters set to provided values
 
@@ -494,7 +494,25 @@ use the following command to show help message
    If absolute difference between metrics is smaller than *tol*, then metrics are considered
    almost equal. Check benchmark testsuite `writing guide <#benchmark-testsuite>`_ on setting alternative tolerance.
 
-5. skip-data:
+5. storage-tag
+
+    .. code-block:: bash
+
+       fate_test performance -i <path1 contains *benchmark.json> -s test
+
+    will run benchmark testsuites in *path1* with performance stored under provided tag for future comparison;
+    note that FATE-Test always records the most recent run for each tag; if the same tag
+    is used more than once, only metrics from the latest job is kept
+
+6. history-tag
+
+    .. code-block:: bash
+
+       fate_test performance -i <path1 contains *benchmark.json> -v test1 -v test2
+
+    will run benchmark testsuites in *path1* with performance compared to history jobs under provided tag(s)
+
+7. skip-data:
 
    .. code-block:: bash
 
@@ -502,7 +520,7 @@ use the following command to show help message
 
    will run benchmark testsuites in *path1* without uploading data specified in *benchmark.json*.
 
-6. disable-clean-data:
+8. disable-clean-data:
 
    .. code-block:: bash
 
@@ -510,7 +528,7 @@ use the following command to show help message
 
    will run benchmark testsuites in *path1* without removing data from storage after tasks finish
 
-7. enable-clean-data:
+9. enable-clean-data:
 
    .. code-block:: bash
 
@@ -518,7 +536,7 @@ use the following command to show help message
 
    will remove data from storage after finishing running benchmark testsuites
 
-8. yes:
+10. yes:
 
    .. code-block:: bash
 
@@ -704,7 +722,7 @@ command options
 
    .. code-block:: bash
 
-      fate_test performance -i <path1 contains *testsuite.json> -n 5
+      fate_test performance -i <path1 contains *testsuite.json> -nt 5
 
    will run testsuites in *path1* with all values to key "num_trees" set to 5
 
@@ -720,7 +738,7 @@ command options
 
    .. code-block:: bash
 
-      fate_test performance -i <path1 contains *testsuite.json> -j {}
+      fate_test performance -i <path1 contains *testsuite.json> -uj {}
 
    will run testsuites in *path1* with respective job parameters set to provided values
 
@@ -728,11 +746,29 @@ command options
 
     .. code-block:: bash
 
-       fate_test performance -i <path1 contains *testsuite.json> -c {}
+       fate_test performance -i <path1 contains *testsuite.json> -uc {}
 
     will run testsuites in *path1* with respective component parameters set to provided values
 
-11. skip-data:
+11. storage-tag
+
+    .. code-block:: bash
+
+       fate_test performance -i <path1 contains *testsuite.json> -s test
+
+    will run testsuites in *path1* with performance time stored under provided tag for future comparison;
+    note that FATE-Test always records the most recent run for each tag; if the same tag
+    is used more than once, only performance from the latest job is kept
+
+12. history-tag
+
+    .. code-block:: bash
+
+       fate_test performance -i <path1 contains *testsuite.json> -v test1 -v test2
+
+    will run testsuites in *path1* with performance time compared to history jobs under provided tag(s)
+
+13. skip-data:
 
     .. code-block:: bash
 
@@ -740,7 +776,7 @@ command options
 
     will run testsuites in *path1* without uploading data specified in *testsuite.json*.
 
-12. disable-clean-data:
+14. disable-clean-data:
 
     .. code-block:: bash
 
@@ -748,7 +784,7 @@ command options
 
     will run testsuites in *path1* without removing data from storage after tasks finish
 
-13. yes:
+15. yes:
 
     .. code-block:: bash
 

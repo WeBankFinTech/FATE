@@ -195,6 +195,18 @@ class FLOWClient(object):
         response = QueryJobResponse(self.flow_client(request='job/query', param=param))
         return response
 
+    def get_version(self):
+        response = self._post(url='version/get', json={"module": "FATE"})
+        try:
+            retcode = response['retcode']
+            retmsg = response['retmsg']
+            if retcode != 0 or retmsg != 'success':
+                raise RuntimeError(f"get version error: {response}")
+            fate_version = response["data"]["FATE"]
+        except Exception as e:
+            raise RuntimeError(f"get version error: {response}") from e
+        return fate_version
+
     def _add_notes(self, job_id, role, party_id, notes):
         data = dict(job_id=job_id, role=role, party_id=party_id, notes=notes)
         response = AddNotesResponse(self._post(url='job/update', json=data))

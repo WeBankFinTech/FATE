@@ -41,9 +41,9 @@ from fate_test.scripts._utils import _load_testsuites, _upload_data, _delete_dat
               help="glob string to filter sub-directory of path specified by <include>")
 @click.option('-m', '--timeout', type=int, default=3600, help="Task timeout duration")
 @click.option('-p', '--task-cores', type=int, help="processors per node")
-@click.option('-j', '--update-job-parameters', default="{}", type=JSON_STRING,
+@click.option('-uj', '--update-job-parameters', default="{}", type=JSON_STRING,
               help="a json string represents mapping for replacing fields in conf.job_parameters")
-@click.option('-c', '--update-component-parameters', default="{}", type=JSON_STRING,
+@click.option('-uc', '--update-component-parameters', default="{}", type=JSON_STRING,
               help="a json string represents mapping for replacing fields in conf.component_parameters")
 @click.option("--skip-dsl-jobs", is_flag=True, default=False,
               help="skip dsl jobs defined in testsuite")
