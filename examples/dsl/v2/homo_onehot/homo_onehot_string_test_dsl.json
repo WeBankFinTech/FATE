@@ -1,0 +1,192 @@
+{
+    "components": {
+        "reader_0": {
+            "module": "Reader",
+            "output": {
+                "data": [
+                    "data"
+                ]
+            }
+        },
+        "reader_1": {
+            "module": "Reader",
+            "output": {
+                "data": [
+                    "data"
+                ]
+            }
+        },
+        "dataio_0": {
+            "module": "DataIO",
+            "input": {
+                "data": {
+                    "data": [
+                        "reader_0.data"
+                    ]
+                }
+            },
+            "output": {
+                "data": [
+                    "data"
+                ],
+                "model": [
+                    "model"
+                ]
+            }
+        },
+        "dataio_1": {
+            "module": "DataIO",
+            "input": {
+                "data": {
+                    "data": [
+                        "reader_1.data"
+                    ]
+                },
+                "model": [
+                    "dataio_0.model"
+                ]
+            },
+            "output": {
+                "data": [
+                    "data"
+                ],
+                "model": [
+                    "model"
+                ]
+            }
+        },
+        "homo_onehot_0": {
+            "module": "HomoOneHotEncoder",
+            "input": {
+                "data": {
+                    "data": [
+                        "dataio_0.data"
+                    ]
+                }
+            },
+            "output": {
+                "data": [
+                    "data"
+                ],
+                "model": [
+                    "model"
+                ]
+            }
+        },
+        "homo_onehot_1": {
+            "module": "HomoOneHotEncoder",
+            "input": {
+                "data": {
+                    "data": [
+                        "dataio_1.data"
+                    ]
+                },
+                "model": [
+                    "homo_onehot_0.model"
+                ]
+            },
+            "output": {
+                "data": [
+                    "data"
+                ],
+                "model": [
+                    "model"
+                ]
+            }
+        },
+        "scale_0": {
+            "module": "FeatureScale",
+            "input": {
+                "data": {
+                    "data": [
+                        "homo_onehot_0.data"
+                    ]
+                }
+            },
+            "output": {
+                "data": [
+                    "data"
+                ],
+                "model": [
+                    "model"
+                ]
+            }
+        },
+        "scale_1": {
+            "module": "FeatureScale",
+            "input": {
+                "data": {
+                    "data": [
+                        "homo_onehot_1.data"
+                    ]
+                },
+                "model": [
+                    "scale_0.model"
+                ]
+            },
+            "output": {
+                "data": [
+                    "data"
+                ],
+                "model": [
+                    "model"
+                ]
+            }
+        },
+        "homo_lr_0": {
+            "module": "HomoLR",
+            "input": {
+                "data": {
+                    "train_data": [
+                        "scale_0.data"
+                    ]
+                }
+            },
+            "output": {
+                "data": [
+                    "data"
+                ],
+                "model": [
+                    "model"
+                ]
+            }
+        },
+        "homo_lr_1": {
+            "module": "HomoLR",
+            "input": {
+                "data": {
+                    "test_data": [
+                        "scale_1.data"
+                    ]
+                },
+                "model": [
+                    "homo_lr_0.model"
+                ]
+            },
+            "output": {
+                "data": [
+                    "data"
+                ],
+                "model": [
+                    "model"
+                ]
+            }
+        },
+        "evaluation_0": {
+            "module": "Evaluation",
+            "input": {
+                "data": {
+                    "data": [
+                        "homo_lr_0.data",
+                        "homo_lr_1.data"
+                    ]
+                }
+            },
+            "output": {
+                "data": [
+                    "data"
+                ]
+            }
+        }
+    }
+}

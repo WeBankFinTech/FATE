@@ -3,7 +3,7 @@
         {
             "file": "examples/data/unified_dataset_noniid_1_1000.csv",
             "head": 1,
-            "partition": 10,
+            "partition": 8,
             "table_name": "heart_nonscaled_hetero_guest",
             "namespace": "experiment",
             "role": "guest_0"
@@ -11,7 +11,7 @@
         {
             "file": "examples/data/unified_dataset_noniid_2_1000_mani.csv",
             "head": 1,
-            "partition": 10,
+            "partition": 8,
             "table_name": "heart_nonscaled_hetero_host",
             "namespace": "experiment",
             "role": "host_0"
@@ -19,7 +19,7 @@
         {
             "file": "examples/data/unified_dataset_validation_1000.csv",
             "head": 1,
-            "partition": 10,
+            "partition": 8,
             "table_name": "heart_nonscaled_hetero_test",
             "namespace": "experiment",
             "role": "host_0"
@@ -27,15 +27,37 @@
         {
             "file": "examples/data/unified_dataset_validation_1000.csv",
             "head": 1,
-            "partition": 10,
+            "partition": 8,
             "table_name": "heart_nonscaled_hetero_test",
             "namespace": "experiment",
             "role": "guest_0"
+        },
+        {
+            "file": "examples/data/mocked_string_data.csv",
+            "head": 1,
+            "partition": 8,
+            "table_name": "mock_string",
+            "namespace": "experiment",
+            "role": "guest_0"
+        },
+        {
+            "file": "examples/data/mocked_string_data.csv",
+            "head": 1,
+            "partition": 8,
+            "table_name": "mock_string",
+            "namespace": "experiment",
+            "role": "host_0"
         }
     ],
     "pipeline_tasks": {
-        "test": {
+        "homo-onehot-string-test": {
+            "script": "pipeline-homo-onehot-string-test.py"
+        },
+        "homo-onehot-test": {
             "script": "pipeline-homo-onehot-test.py"
+        },
+        "homo-onehot-string-partial_col-test": {
+            "script": "pipeline-homo-onehot-string-partial_col-test.py"
         }
     }
 }

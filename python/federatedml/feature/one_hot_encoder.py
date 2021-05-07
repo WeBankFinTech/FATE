@@ -82,6 +82,7 @@ class TransferPair(object):
         self.name = name
         self._values = set()
         self._transformed_headers = {}
+        self._ordered_header = None
 
     def add_value(self, value):
         if value in self._values:
@@ -96,7 +97,15 @@ class TransferPair(object):
 
     @property
     def values(self):
-        return list(self._values)
+        if self._ordered_header is None:
+            return list(self._values)
+        if len(self._ordered_header) != len(list(self._values)):
+            raise ValueError("Indicated order header length is not equal to value set,"
+                             f" ordered_header: {self._ordered_header}, values: {self._values}")
+        return self._ordered_header
+
+    def set_ordered_header(self, ordered_header):
+        self._ordered_header = ordered_header
 
     @property
     def transformed_headers(self):
@@ -285,7 +294,8 @@ class OneHotEncoder(ModelBase):
 
         new_feature = [_transformed_value[x] if x in _transformed_value else 0 for x in result_header]
 
-        feature_array = np.array(new_feature, dtype='float64')
+        # feature_array = np.array(new_feature, dtype='float64')
+        feature_array = np.array(new_feature)
         instance.features = feature_array
         return instance
 
@@ -346,6 +356,10 @@ class OneHotEncoder(ModelBase):
                 self.col_maps[col_name] = TransferPair(col_name)
             pair_obj = self.col_maps[col_name]
             for feature_value in list(cols_map_obj.values):
-                pair_obj.add_value(eval(feature_value))
+                try:
+                    feature_value = eval(feature_value)
+                except NameError:
+                    pass
+                pair_obj.add_value(feature_value)
 
         self.inner_param.set_result_header(list(model_param.result_header))

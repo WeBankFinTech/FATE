@@ -26,34 +26,31 @@
         "role": {
             "host": {
                 "0": {
-                    "reader_1": {
-                        "table": {
-                            "name": "heart_nonscaled_hetero_test",
-                            "namespace": "experiment"
-                        }
-                    },
                     "reader_0": {
                         "table": {
-                            "name": "heart_nonscaled_hetero_host",
+                            "name": "mock_string",
                             "namespace": "experiment"
                         }
                     },
-                    "evaluation_0": {
-                        "need_run": false
+                    "reader_1": {
+                        "table": {
+                            "name": "mock_string",
+                            "namespace": "experiment"
+                        }
                     }
                 }
             },
             "guest": {
                 "0": {
-                    "reader_1": {
+                    "reader_0": {
                         "table": {
-                            "name": "heart_nonscaled_hetero_test",
+                            "name": "mock_string",
                             "namespace": "experiment"
                         }
                     },
-                    "reader_0": {
+                    "reader_1": {
                         "table": {
-                            "name": "heart_nonscaled_hetero_guest",
+                            "name": "mock_string",
                             "namespace": "experiment"
                         }
                     }
@@ -62,8 +59,9 @@
         },
         "common": {
             "dataio_0": {
+                "data_type": "str",
                 "with_label": true,
-                "label_name": "target",
+                "label_name": "y",
                 "output_format": "dense"
             },
             "homo_onehot_0": {
@@ -79,36 +77,6 @@
                 ],
                 "transform_col_names": [],
                 "need_alignment": true
-            },
-            "scale_0": {
-                "method": "standard_scale"
-            },
-            "homo_lr_0": {
-                "penalty": "L2",
-                "tol": 1e-05,
-                "alpha": 0.01,
-                "optimizer": "sgd",
-                "batch_size": 500,
-                "learning_rate": 0.15,
-                "init_param": {
-                    "init_method": "zeros"
-                },
-                "max_iter": 3,
-                "early_stop": "diff",
-                "encrypt_param": {
-                    "method": "Paillier"
-                },
-                "cv_param": {
-                    "n_splits": 4,
-                    "shuffle": true,
-                    "random_seed": 33,
-                    "need_cv": false
-                },
-                "decay": 1,
-                "decay_sqrt": true
-            },
-            "evaluation_0": {
-                "eval_type": "binary"
             }
         }
     }

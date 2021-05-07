@@ -24,36 +24,36 @@
     },
     "component_parameters": {
         "role": {
-            "host": {
+            "guest": {
                 "0": {
-                    "reader_1": {
-                        "table": {
-                            "name": "heart_nonscaled_hetero_test",
-                            "namespace": "experiment"
-                        }
-                    },
                     "reader_0": {
                         "table": {
-                            "name": "heart_nonscaled_hetero_host",
+                            "name": "mock_string",
                             "namespace": "experiment"
                         }
                     },
-                    "evaluation_0": {
-                        "need_run": false
+                    "reader_1": {
+                        "table": {
+                            "name": "mock_string",
+                            "namespace": "experiment"
+                        }
                     }
                 }
             },
-            "guest": {
+            "host": {
                 "0": {
-                    "reader_1": {
-                        "table": {
-                            "name": "heart_nonscaled_hetero_test",
-                            "namespace": "experiment"
-                        }
+                    "evaluation_0": {
+                        "need_run": false
                     },
                     "reader_0": {
                         "table": {
-                            "name": "heart_nonscaled_hetero_guest",
+                            "name": "mock_string",
+                            "namespace": "experiment"
+                        }
+                    },
+                    "reader_1": {
+                        "table": {
+                            "name": "mock_string",
                             "namespace": "experiment"
                         }
                     }
@@ -62,21 +62,13 @@
         },
         "common": {
             "dataio_0": {
+                "data_type": "str",
                 "with_label": true,
-                "label_name": "target",
+                "label_name": "y",
                 "output_format": "dense"
             },
             "homo_onehot_0": {
-                "transform_col_indexes": [
-                    1,
-                    2,
-                    5,
-                    6,
-                    8,
-                    10,
-                    11,
-                    12
-                ],
+                "transform_col_indexes": -1,
                 "transform_col_names": [],
                 "need_alignment": true
             },
