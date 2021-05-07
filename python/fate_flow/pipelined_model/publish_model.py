@@ -14,6 +14,8 @@
 #  limitations under the License.
 #
 import grpc
+import os
+from ruamel import yaml
 
 from fate_flow.settings import IP, HTTP_PORT, FATE_FLOW_MODEL_TRANSFER_ENDPOINT
 from fate_arch.common.conf_utils import get_base_config
@@ -22,6 +24,7 @@ from fate_arch.protobuf.python import model_service_pb2_grpc
 from fate_flow.settings import stat_logger
 from fate_flow.utils import model_utils
 from fate_flow.pipelined_model import pipelined_model
+from federatedml.protobuf.homo_model_convert.homo_model_convert import model_convert, save_converted_model
 
 
 def generate_publish_model_info(config_data):
@@ -108,3 +111,45 @@ def download_model(request_data):
     model_data = model.collect_models(in_bytes=True)
     return model_data
 
+
+def convert_homo_model(request_data):
+    party_model_id = model_utils.gen_party_model_id(model_id=request_data["model_id"],
+                                                    role=request_data["role"],
+                                                    party_id=request_data["party_id"])
+    model_version = request_data.get("model_version")
+    model = pipelined_model.PipelinedModel(model_id=party_model_id, model_version=model_version)
+    if not model.exists():
+        return 100, 'Model {} {} does not exist'.format(party_model_id, model_version), None
+
+    with open(model.define_meta_path, "r", encoding="utf-8") as fr:
+        define_index = yaml.safe_load(fr)
+
+    framework_name = request_data.get("framework_name")
+    detail = []
+    for key, value in define_index.get("model_proto", {}).items():
+        if key == 'pipeline':
+            continue
+        for v in value.keys():
+            buffer_obj = model.read_component_model(key, v)
+            module_name = define_index.get("component_define", {}).get(key, {}).get('module_name')
+            converted_framework, converted_model = model_convert(model_contents=buffer_obj,
+                                                                 module_name=module_name,
+                                                                 framework_name=framework_name)
+            if converted_model:
+                converted_model_dir = os.path.join(model.variables_data_path, key, "converted_model")
+                os.makedirs(converted_model_dir, exist_ok=True)
+
+                saved_path = save_converted_model(converted_model,
+                                                  converted_framework,
+                                                  converted_model_dir)
+                detail.append({
+                    "component_name": key,
+                    "converted_model_path": saved_path
+                })
+    if len(detail) > 0:
+        return (0,
+                f"Conversion of homogeneous federated learning component(s) in model "
+                f"{party_model_id}:{model_version} completed. Use export to download the converted model.",
+                detail)
+    else:
+        return 100, f"No component in model {party_model_id}:{model_version} can be converted.", None

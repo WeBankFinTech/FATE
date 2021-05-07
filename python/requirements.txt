@@ -5,6 +5,7 @@ cloudpickle==0.6.1
 cos-python-sdk-v5==1.8.0
 Flask==1.0.2
 gmpy2==2.0.8
+joblib==1.0.1
 kazoo==2.6.1
 lmdb==0.98
 numpy>=1.18.4
