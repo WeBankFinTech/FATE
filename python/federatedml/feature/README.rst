@@ -172,7 +172,7 @@ Param
 Column Expand
 =============
 Column Expand is used for adding arbitrary number of columns with user-provided values.
-This module is run directly on table object(raw data), before data entering DataIO.
+This module is run directly on table object(raw data), before data entering Data Transform.
 
 Param
 ------
@@ -196,4 +196,17 @@ Param
 ------
 
 .. automodule:: federatedml.param.sbt_feature_transformer_param
+   :members:
+
+Feature Imputation
+==================
+Feature Imputation fills missing values on dense instances.
+Imputation can be done on select columns using arbitrary methods. Please refer
+`here <../../../examples/pipeline/feature_imputation>`_ for examples.
+this
+
+Param
+------
+
+.. automodule:: federatedml.param.feature_imputation_param
    :members:

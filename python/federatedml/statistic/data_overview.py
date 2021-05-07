@@ -41,6 +41,16 @@ def get_features_shape(data_instances):
         return None
 
 
+def get_instance_shape(instance):
+    if instance is None:
+        return None
+
+    if type(instance.features).__name__ == consts.SPARSE_VECTOR:
+        return instance.features.get_shape()
+    else:
+        return instance.features.shape[0]
+
+
 def max_abs_sample_weight_map_func(kv_iter):
 
     max_weight = -1

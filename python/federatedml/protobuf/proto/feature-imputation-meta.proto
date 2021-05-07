@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package com.webank.ai.fate.core.mlmodel.buffer;
+option java_outer_classname = "FeatureImputationMetaProto";
+
+message FeatureImputerMeta{
+    bool is_imputer = 1;
+    string strategy = 2;
+    repeated string missing_value = 3;
+    repeated string missing_value_type = 4;
+}
+
+message FeatureImputationMeta {
+   FeatureImputerMeta imputer_meta = 1;
+   bool need_run = 2;
+}
+

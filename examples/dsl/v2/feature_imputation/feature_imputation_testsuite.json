@@ -1,0 +1,50 @@
+{
+    "data": [
+        {
+            "file": "examples/data/breast_hetero_host.csv",
+            "head": 1,
+            "partition": 16,
+            "table_name": "breast_hetero_host",
+            "namespace": "experiment",
+            "role": "host_0"
+        },
+        {
+            "file": "examples/data/breast_hetero_guest.csv",
+            "head": 1,
+            "partition": 16,
+            "table_name": "breast_hetero_guest",
+            "namespace": "experiment",
+            "role": "guest_0"
+        },
+        {
+            "file": "examples/data/dvisits_hetero_host.csv",
+            "head": 1,
+            "partition": 4,
+            "table_name": "dvisits_hetero_host",
+            "namespace": "experiment",
+            "role": "host_0"
+        },
+        {
+            "file": "examples/data/dvisits_hetero_guest.csv",
+            "head": 1,
+            "partition": 4,
+            "table_name": "dvisits_hetero_guest",
+            "namespace": "experiment",
+            "role": "guest_0"
+        }
+    ],
+    "tasks": {
+        "designated": {
+            "conf": "./feature_imputation_designated_job_conf.json",
+            "dsl": "./feature_imputation_job_dsl.json"
+        },
+        "method": {
+            "conf": "./feature_imputation_method_job_conf.json",
+            "dsl": "./feature_imputation_job_dsl.json"
+        },
+        "diff-method-per-column": {
+            "conf": "./feature_imputation_column_method_job_conf.json",
+            "dsl": "./feature_imputation_job_dsl.json"
+        }
+    }
+}

@@ -7,9 +7,9 @@ from fate_arch.session import computing_session as session
 from federatedml.feature.imputer import Imputer
 
 
-class TestMinMaxScaler(unittest.TestCase):
+class TestImputer(unittest.TestCase):
     def setUp(self):
-        session.init("test_min_max_scaler_" + str(random.random()))
+        session.init("test_imputer_" + str(random.random()))
         str_time = time.strftime("%Y%m%d%H%M%S", time.localtime())
 
         self.test_data = [

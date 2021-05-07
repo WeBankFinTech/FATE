@@ -182,6 +182,9 @@ class IntersectParam(BaseParam):
     repeated_id_owner: str, which role has the repeated ids
 
     with_sample_id: bool, data with sample id or not, default False; set this param to True may lead to unexpected behavior
+
+    left_join: bool, whether to supplement imputed host ids, default False. Only valid when with_sample_id is set to True
+
     """
 
     def __init__(self, intersect_method: str = consts.RAW, random_bit=128, sync_intersect_ids=True,
@@ -189,7 +192,7 @@ class IntersectParam(BaseParam):
                  with_encode=False, only_output_key=False, encode_params=EncodeParam(),
                  rsa_params=RSAParam(),
                  intersect_cache_param=IntersectCache(), repeated_id_process=False, repeated_id_owner=consts.GUEST,
-                 with_sample_id=False,
+                 with_sample_id=False, left_join=False,
                  allow_info_share: bool = False, info_owner=consts.GUEST):
         super().__init__()
         self.intersect_method = intersect_method
@@ -206,6 +209,7 @@ class IntersectParam(BaseParam):
         self.allow_info_share = allow_info_share
         self.info_owner = info_owner
         self.with_sample_id = with_sample_id
+        self.left_join = left_join
 
     def check(self):
         descr = "intersect param's "
@@ -254,9 +258,20 @@ class IntersectParam(BaseParam):
         self.info_owner = self.check_and_change_lower(self.info_owner,
                                                       [consts.GUEST, consts.HOST],
                                                       descr+"info_owner")
+
         self.check_boolean(self.with_sample_id, descr+"with_sample_id")
+        self.check_boolean(self.left_join, descr+"left_join")
+
         if self.with_sample_id:
-            LOGGER.warning(f"Using with_sample_id may lead to unexpected behavior.")
+            LOGGER.warning(f"Setting with_sample_id may lead to unexpected behavior.")
+            if not self.repeated_id_process:
+                LOGGER.warning(f"with_sample_id only effective when repeated_id_process is set to True")
+
+        if self.left_join:
+            if self.intersect_method == consts.RAW and not self.sync_intersect_ids:
+                raise ValueError(f"Cannot perform left join without sync intersect ids")
+            if self.intersect_method == consts.RSA and not self.allow_info_share:
+                raise ValueError(f"Cannot perform left join without sharing info")
 
         self.encode_params.check()
         self.rsa_params.check()

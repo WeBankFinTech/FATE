@@ -14,5 +14,3 @@ This section introduces the pipeline scripts of feature scale tasks.
 Users can use following commands to running the task.
 
     python ${pipeline_script}
-
-Note: the intersection output is only ids of intersection, because of the parameter of "only_output_key" in runtime_config.  

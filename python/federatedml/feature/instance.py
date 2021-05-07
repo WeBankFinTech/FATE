@@ -51,3 +51,7 @@ class Instance(object):
 
     def set_feature(self, features):
         self.features = features
+
+    @property
+    def with_inst_id(self):
+        return self.inst_id is not None

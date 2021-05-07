@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package com.webank.ai.fate.core.mlmodel.buffer;
+option java_outer_classname = "FeatureImputationParamProto";
+
+message FeatureImputerParam{
+    map<string, string> missing_replace_value = 1;
+	  map<string, double> missing_value_ratio = 2;
+	  map<string, string> missing_replace_value_type = 3;
+	  repeated string skip_cols = 4;
+}
+
+
+message FeatureImputationParam {
+    repeated string header = 1;
+    FeatureImputerParam imputer_param = 2;
+}

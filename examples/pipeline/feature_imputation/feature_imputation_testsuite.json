@@ -1,0 +1,47 @@
+{
+    "data": [
+        {
+            "file": "examples/data/breast_hetero_host.csv",
+            "head": 1,
+            "partition": 4,
+            "table_name": "breast_hetero_host",
+            "namespace": "experiment",
+            "role": "host_0"
+        },
+        {
+            "file": "examples/data/breast_hetero_guest.csv",
+            "head": 1,
+            "partition": 4,
+            "table_name": "breast_hetero_guest",
+            "namespace": "experiment",
+            "role": "guest_0"
+        },
+        {
+            "file": "examples/data/dvisits_hetero_host.csv",
+            "head": 1,
+            "partition": 4,
+            "table_name": "dvisits_hetero_host",
+            "namespace": "experiment",
+            "role": "host_0"
+        },
+        {
+            "file": "examples/data/dvisits_hetero_guest.csv",
+            "head": 1,
+            "partition": 4,
+            "table_name": "dvisits_hetero_guest",
+            "namespace": "experiment",
+            "role": "guest_0"
+        }
+    ],
+    "pipeline_tasks": {
+        "designated": {
+            "script": "pipeline-feature-imputation-designated.py"
+        },
+        "method": {
+            "script": "pipeline-feature-imputation-method.py"
+        },
+        "diff-method-per-column": {
+            "script": "pipeline-feature-imputation-column-method.py"
+        }
+    }
+}

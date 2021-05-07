@@ -1,0 +1,11 @@
+{
+    "module_path":  "federatedml/feature",
+    "param_class" : "federatedml/param/feature_imputation_param.py/FeatureImputationParam",
+    "role":
+    {
+        "guest|host":
+        {
+            "program": "feature_imputation.py/FeatureImputation"
+        }
+    }
+}
