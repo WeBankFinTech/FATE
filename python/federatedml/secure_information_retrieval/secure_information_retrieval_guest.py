@@ -91,6 +91,8 @@ class SecureInformationRetrievalGuest(BaseSecureInformationRetrieval):
         # EEg: guest's doubly encrypted ciphertext
         # h, Eh, EEh: host
         # i, Ei, EEi: intersection
+        # record converted string id in case of non-ascii
+        recorded_k_data = data_inst.map(lambda k, v: BaseSecureInformationRetrieval.record_original_id(k, v))
         id_list_guest_first = self._encrypt_id(data_inst)      # (Eg, -1)
         LOGGER.info("encrypted guest id for the 1st time")
         id_list_host_first = self._exchange_id_list(id_list_guest_first)              # send (Eg, -1), get (Eh, -1)
@@ -136,6 +138,8 @@ class SecureInformationRetrievalGuest(BaseSecureInformationRetrieval):
 
         # 12. Merge result
         data_output = self._merge(target_block_cipher_cipher_id, id_list_intersect_cipher_id)
+        data_output = recorded_k_data.join(data_output, lambda v1, v2: (v1, v2))
+        data_output = data_output.map(lambda k, v: (v[0], v[1]))
         data_output = self._compensate_set_difference(data_inst, data_output)
         self._display_result()
         LOGGER.info("secure information retrieval finished")

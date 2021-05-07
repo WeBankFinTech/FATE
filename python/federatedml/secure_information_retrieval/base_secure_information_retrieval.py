@@ -22,7 +22,7 @@ from federatedml.protobuf.generated import sir_meta_pb2, sir_param_pb2
 from fate_flow.entity.metric import Metric, MetricMeta
 from federatedml.model_base import ModelBase
 from federatedml.param.sir_param import SecureInformationRetrievalParam
-from federatedml.util import abnormal_detection, LOGGER
+from federatedml.util import abnormal_detection, LOGGER, conversion
 from federatedml.transfer_variable.transfer_class.secure_information_retrieval_transfer_variable import \
     SecureInformationRetrievalTransferVariable
 
@@ -67,6 +67,14 @@ class BaseSecureInformationRetrieval(ModelBase):
         """
         abnormal_detection.empty_table_detection(data_instances)
         abnormal_detection.empty_feature_detection(data_instances)
+
+    @staticmethod
+    def record_original_id(k, v):
+        if isinstance(k, str):
+            restored_id = conversion.int_to_str(conversion.str_to_int(k))
+        else:
+            restored_id = k
+        return (restored_id, k)
 
     def _encrypt_id(self, data_instance, mode):
         pass
